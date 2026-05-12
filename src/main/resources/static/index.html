@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockFlow</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="topbar">
+    <div>
+        <p class="eyebrow">Inventory Operations</p>
+        <h1>StockFlow</h1>
+    </div>
+    <button id="pageRefreshButton" class="topbar-button" type="button">Refresh Dashboard</button>
+</header>
+
+<main class="layout">
+    <section class="dashboard">
+        <article class="metric status-reserved">
+            <span>Reserved</span>
+            <strong id="reservedOrders">0</strong>
+        </article>
+        <article class="metric status-paid">
+            <span>Paid</span>
+            <strong id="paidOrders">0</strong>
+        </article>
+        <article class="metric status-invoiced">
+            <span>Invoiced</span>
+            <strong id="invoicedOrders">0</strong>
+        </article>
+        <article class="metric status-cancelled">
+            <span>Cancelled</span>
+            <strong id="cancelledOrders">0</strong>
+        </article>
+        <article class="metric">
+            <span>Revenue</span>
+            <strong id="revenue">$0.00</strong>
+        </article>
+        <article class="metric">
+            <span>Total Products</span>
+            <strong id="totalProducts">0</strong>
+        </article>
+        <article class="metric warning-metric">
+            <span>Low Stock</span>
+            <strong id="lowStockProductsCount">0</strong>
+        </article>
+        <article class="metric">
+            <span>Total Orders</span>
+            <strong id="totalOrders">0</strong>
+        </article>
+        <article class="metric">
+            <span>Avg Order</span>
+            <strong id="averageOrderValue">$0.00</strong>
+        </article>
+        <article class="metric best-seller">
+            <span>Best Seller</span>
+            <strong id="bestSellingProduct">None</strong>
+            <small id="bestSellingQuantity">0 sold</small>
+        </article>
+    </section>
+
+    <section class="panel alert-panel">
+        <div class="panel-header compact-header">
+            <div>
+                <h2>Low-Stock Alert</h2>
+                <p>Products under 5 units.</p>
+            </div>
+            <span class="alert-pill">Needs attention</span>
+        </div>
+        <div id="lowStockProducts" class="list compact-list"></div>
+    </section>
+
+    <section class="form-strip">
+        <article class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2>Add Product</h2>
+                    <p>Create stock that customers can order.</p>
+                </div>
+            </div>
+
+            <form id="productForm" class="form-grid product-form">
+                <label>
+                    Name
+                    <input id="productName" type="text" placeholder="Keyboard" required>
+                </label>
+                <label>
+                    Category
+                    <input id="productCategory" type="text" placeholder="Accessories" required>
+                </label>
+                <label>
+                    Price
+                    <input id="productPrice" type="number" min="0.01" step="0.01" placeholder="79.99" required>
+                </label>
+                <label>
+                    Stock
+                    <input id="productStock" type="number" min="0" step="1" placeholder="20" required>
+                </label>
+                <button type="submit">Create Product</button>
+            </form>
+        </article>
+
+        <article class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2>Create Order</h2>
+                    <p>New orders start reserved, then move to paid and invoiced.</p>
+                </div>
+            </div>
+
+            <form id="orderForm" class="form-grid order-form">
+                <label>
+                    Customer
+                    <input id="customerName" type="text" placeholder="Alex" required>
+                </label>
+                <label>
+                    Product
+                    <select id="orderProduct" required></select>
+                </label>
+                <label>
+                    Quantity
+                    <input id="orderQuantity" type="number" min="1" step="1" value="1" required>
+                </label>
+                <button type="submit">Create Order</button>
+            </form>
+        </article>
+    </section>
+
+    <section class="split">
+        <article class="panel">
+            <div class="panel-header list-header">
+                <div>
+                    <h2>Products</h2>
+                    <p>Filter catalog by category and stock level.</p>
+                </div>
+                <button id="productRefreshButton" class="secondary-button" type="button">Refresh</button>
+            </div>
+
+            <div class="filter-bar">
+                <label>
+                    Category
+                    <select id="categoryFilter">
+                        <option value="">All categories</option>
+                    </select>
+                </label>
+                <label class="checkbox-label">
+                    <input id="lowStockOnly" type="checkbox">
+                    Low stock only
+                </label>
+            </div>
+
+            <div class="table-head product-head">
+                <span>Product</span>
+                <span>Category</span>
+                <span>Price</span>
+                <span>Stock</span>
+                <span>Restock</span>
+            </div>
+            <div id="products" class="list table-list"></div>
+        </article>
+
+        <article class="panel">
+            <div class="panel-header list-header">
+                <div>
+                    <h2>Orders</h2>
+                    <p>Track status and move each order forward.</p>
+                </div>
+                <button id="refreshButton" class="secondary-button" type="button">Refresh</button>
+            </div>
+
+            <div id="orderStatusTabs" class="status-tabs">
+                <button class="tab active" data-status="" type="button">All</button>
+                <button class="tab" data-status="RESERVED" type="button">Reserved</button>
+                <button class="tab" data-status="PAID" type="button">Paid</button>
+                <button class="tab" data-status="INVOICED" type="button">Invoiced</button>
+                <button class="tab" data-status="CANCELLED" type="button">Cancelled</button>
+            </div>
+
+            <label class="search-label">
+                Customer search
+                <input id="customerSearch" type="search" placeholder="Search by customer name">
+            </label>
+
+            <div class="table-head order-head">
+                <span>Order</span>
+                <span>Total</span>
+                <span>Status</span>
+                <span>Actions</span>
+            </div>
+            <div id="orders" class="list table-list"></div>
+        </article>
+    </section>
+
+    <p id="message" class="message" aria-live="polite"></p>
+</main>
+
+<script src="/app.js"></script>
+</body>
+</html>
